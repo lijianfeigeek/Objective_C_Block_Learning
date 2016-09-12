@@ -22,6 +22,7 @@
         * block作为返回值
         * block属性
     * ARC与非ARC(MRC)下的Weak-Strong Dance
+        * 循环引用(retain cycle)
         * ARC 的Weak-Strong Dance
         * 非ARC(MRC) 的Weak-Strong Dance
         * 总结
@@ -534,10 +535,30 @@ return [[block copy] autorelease];
 ```
 
 ## ARC与非ARC(MRC)下的Weak-Strong Dance
+### 循环引用(retain cycle)
+循环引用比较简单，造成循环引用的原因无非就是对象和block相互强引用，造成谁都不能释放，从而造成了内存泄漏。那么block里面使用self会造成循环引用吗？
+很显然答案不都是，有些情况下是可以直接使用self的，比如调用系统的方法：
+```
+[UIView animateWithDuration:0.5 animations:^{
+        NSLog(@"%@", self);
+    }];
+```
+因为这个block存在于静态方法中，虽然block对self强引用着，但是self却不持有这个静态方法，所以完全可以在block内部使用self。
+
+还有一种情况：
+当block不是self的属性时，self并不持有这个block，所以也不存在循环引用。
+```
+void(^block)(void) = ^() {
+        NSLog(@"%@", self);
+    };
+block();
+```
+
+只要我们抓住循环引用的本质，就不难理解这些东西。
 
 ### ARC
 
-在使用block过程中，经常会遇到`retain cycle`的问题，例如：
+在使用block过程中，遇到了`retain cycle`的问题呢，例如：
 
 ```
 - (void)dealloc  
@@ -672,7 +693,7 @@ __block的作用：
 
 ARC下只有1。
 # 测试Demo工程地址
-[block_learning]()
+[block_learning](https://github.com/lijianfeigeek/objective_block_learning)
 
 # 参考文献
 * [How Do I Declare A Block in Objective-C?](http://fuckingblocksyntax.com/)
@@ -682,6 +703,5 @@ ARC下只有1。
 * [objc 中的 block](http://blog.ibireme.com/2013/11/27/objc-block/)
 * [Block Apple Source Code Browser ](http://opensource.apple.com/source/libclosure/libclosure-63/)
 * 《Objective-C 高级编程》
-
 
 
