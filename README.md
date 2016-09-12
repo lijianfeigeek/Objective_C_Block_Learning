@@ -1,3 +1,5 @@
+# Objective-C中block实现和技巧
+
 * Block 底层解析
     * 什么是block?
         * block编译转换结构
@@ -693,7 +695,7 @@ __block的作用：
 
 ARC下只有1。
 # 测试Demo工程地址
-[block_learning](https://github.com/lijianfeigeek/objective_block_learning)
+[block_learning](http://gitlab.corp.qunar.com/f.li/block_learning)
 
 # 参考文献
 * [How Do I Declare A Block in Objective-C?](http://fuckingblocksyntax.com/)
@@ -703,5 +705,3 @@ ARC下只有1。
 * [objc 中的 block](http://blog.ibireme.com/2013/11/27/objc-block/)
 * [Block Apple Source Code Browser ](http://opensource.apple.com/source/libclosure/libclosure-63/)
 * 《Objective-C 高级编程》
-
-
